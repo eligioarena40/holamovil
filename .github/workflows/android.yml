@@ -6,36 +6,29 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Get Date
-      id: get-date
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Buildozer dependencies
       run: |
-        echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-
-    - name: Cache Buildozer global directory
-      uses: actions/cache@v3
-      with:
-        path: ~/.buildozer
-        key: buildozer-global-${{ hashFiles('buildozer.spec') }}
-
-    - name: Cache Buildozer pocket directory
-      uses: actions/cache@v3
-      with:
-        path: .buildozer
-        key: ${{ runner.os }}-buildozer-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+        sudo apt update
+        sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libssl-dev cmake
 
     - name: Build with Buildozer
-      uses: ArtemSanya/buildozer-action@v1
+      uses: JpSenior/buildozer-action@v2
       with:
         workdir: .
         buildozer_version: stable
 
     - name: Upload APK Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: package
+        name: Reproductor-APK
         path: bin/*.apk
