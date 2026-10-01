@@ -16,5 +16,5 @@ android.allow_backup = True
 android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
 [buildozer]
-log_level = 2
+log_level = 1
 warn_on_root = 1
