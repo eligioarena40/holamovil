@@ -22,6 +22,11 @@ jobs:
         sudo apt update
         sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libssl-dev cmake
 
+    - name: Install Android SDK licenses auto-accept
+      run: |
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+
     - name: Install Buildozer and Cython
       run: |
         pip install --upgrade pip
@@ -29,7 +34,10 @@ jobs:
 
     - name: Build APK with Buildozer
       run: |
-        buildozer -v android debug
+        # Forzamos la aceptación automática de las licencias de Android
+        export BUILDOZER_WARN_ON_ROOT=0
+        yes | buildozer -v android debug
+      continue-on-error: false
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
