@@ -34,9 +34,9 @@ jobs:
 
     - name: Build APK with Buildozer
       run: |
-        # Forzamos la aceptación automática de las licencias de Android
         export BUILDOZER_WARN_ON_ROOT=0
-        yes | buildozer -v android debug
+        # Forzamos una compilación limpia pero sin saturar la consola de texto redundante
+        buildozer android debug
       continue-on-error: false
 
     - name: Upload APK Artifact
